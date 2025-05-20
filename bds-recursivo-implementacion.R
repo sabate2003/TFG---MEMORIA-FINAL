@@ -4,12 +4,12 @@
 library(tseries) # adf.test, kpss.test, bds.test, get.hist.quote, portfolio.optim, surrogate, arma, garch
 library(forecast) #Autoarima, Acf, pacf
 library(ggplot2)
-library(strucchange)
+library(strucchange) #Sirve para detectar cambios estructurales en la serie.
 library(splus2R) #para encontrar el máximo relativo  
 library(readxl)
 
 # Aquí tengo las funciones que voy a utilizar y las cargo con la siguiente función para poder utilizarlas
-source("bds-recursive-inference-functions_v3.R")
+source("bds-recursive-inference-functions_v3julio.R")
 
 # 1) Pruebo la capacidad del BDS para contrastar IID
 
@@ -30,12 +30,13 @@ source("bds-recursive-inference-functions_v3.R")
 ######################################
 
 ############################Selección de y###############
-
+mi_base_datos <- read_excel("BASE DE DATOS ! .xlsx")
+y0 <- mi_base_datos$Close
 # y serie de prueba
 plot(y0,type='l')
 #y0<-y0[1:length(y0)-1]
 ndiff <- ndiffs(y0)
-
+ndiff
 y<-diff(y0,lag=1,differences = ndiff)
 plot(y,type='l')
 
@@ -57,7 +58,7 @@ plot(y,type='l')
 
 
 # aquí llamo a las funciones que estiman el BDS recursivo ------
-# me quedaría con la v2 o la v3 que utilizan en lugar de bubles programación funcional
+# me quedaría con la v2 o la v3 que utilizan en lugar de bules programación funcional
 
 m=6
 N0=20
@@ -69,6 +70,7 @@ lapso=1
 # bdsout<-bds_recurV3(y,nstd = 0.5, N0=100,m=6, lapso=100, tracebar = TRUE)) # BDS recursivo ))
 
 # con purrr (sustituyo el for por purrr)
+
 bdsout<-bds_recurV2(y,nstd = 0.5, N0=20,m=6, lapso=1, tracebar = TRUE) # BDS recursivo ))
 
 
